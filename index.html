@@ -1,0 +1,1132 @@
+\
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Analyser | Your Study Companion</title>
+
+  <style>
+    :root {
+      --green: #557653;
+      --green-dark: #36543a;
+      --green-light: #e7eee2;
+      --cream: #faf9f4;
+      --white: #ffffff;
+      --text: #29352b;
+      --muted: #6d796c;
+      --border: #dce5d7;
+      --shadow: 0 8px 24px rgba(48, 75, 48, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      line-height: 1.6;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--green-dark);
+    }
+
+    .brand span {
+      color: var(--green);
+    }
+
+    .topbar a {
+      text-decoration: none;
+      color: var(--green-dark);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .container {
+      width: min(1120px, 92%);
+      margin: 0 auto;
+    }
+
+    .hero {
+      margin-top: 28px;
+      padding: 36px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, #e5eddf, #f5f3e8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "❧";
+      position: absolute;
+      right: 20px;
+      bottom: -65px;
+      font-size: 190px;
+      color: rgba(85, 118, 83, 0.12);
+      transform: rotate(-25deg);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    h1 {
+      font-size: clamp(30px, 5vw, 44px);
+      line-height: 1.15;
+      margin: 10px 0;
+      max-width: 650px;
+    }
+
+    .hero p {
+      max-width: 600px;
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+
+    .button {
+      display: inline-block;
+      border: none;
+      border-radius: 12px;
+      padding: 11px 17px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.15s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary {
+      background: var(--green);
+      color: white;
+    }
+
+    .secondary {
+      background: var(--green-light);
+      color: var(--green-dark);
+    }
+
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+      margin: 22px 0 30px;
+    }
+
+    .stat {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 19px;
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--green-dark);
+      margin-top: 5px;
+      overflow-wrap: anywhere;
+    }
+
+    .stat-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 30px;
+    }
+
+    .quick-links a {
+      text-decoration: none;
+      color: var(--green-dark);
+      background: var(--green-light);
+      padding: 9px 13px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .section-heading {
+      margin: 34px 0 15px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .section-heading p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      scroll-margin-top: 20px;
+    }
+
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fcfdfb;
+      color: var(--text);
+      outline-color: var(--green);
+    }
+
+    .field small {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .subject-row {
+      padding: 14px;
+      background: #f8faf6;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .subject-row h3 {
+      font-size: 14px;
+      margin: 0 0 10px;
+    }
+
+    .subject-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .subject-inputs label {
+      font-size: 11px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .subject-inputs input {
+      min-width: 0;
+      width: 100%;
+      padding: 9px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: white;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .notice {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 12px;
+    }
+
+    .error {
+      color: #a23d37;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .result-box {
+      background: var(--green-light);
+      border-radius: 14px;
+      padding: 15px;
+    }
+
+    .result-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .result-box strong {
+      display: block;
+      color: var(--green-dark);
+      font-size: 21px;
+      overflow-wrap: anywhere;
+    }
+
+    .progress-track {
+      height: 12px;
+      background: #e9eee5;
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: var(--green);
+      border-radius: inherit;
+      transition: width 0.3s ease;
+    }
+
+    .tracker-controls {
+      display: grid;
+      grid-template-columns: 1fr 110px;
+      align-items: center;
+      gap: 18px;
+    }
+
+    input[type="range"] {
+      accent-color: var(--green);
+      width: 100%;
+    }
+
+    .chart-row {
+      display: grid;
+      grid-template-columns: 115px 1fr 55px;
+      gap: 12px;
+      align-items: center;
+      margin: 15px 0;
+      font-size: 13px;
+    }
+
+    .bar-track {
+      height: 13px;
+      background: #edf1e9;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--green);
+      border-radius: 20px;
+      width: 0;
+      transition: width 0.4s ease;
+    }
+
+    .advice-list {
+      padding-left: 20px;
+    }
+
+    .advice-list li {
+      margin: 10px 0;
+    }
+
+    .timetable-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .study-session {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 12px;
+      background: #f7faf5;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px;
+    }
+
+    .study-session strong {
+      color: var(--green-dark);
+    }
+
+    .study-session span {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .subject-checks {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .subject-checks label {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: #f8faf6;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 13px;
+    }
+
+    .subject-checks input {
+      accent-color: var(--green);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 35px 15px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 720px) {
+      .dashboard-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero {
+        padding: 25px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .subject-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tracker-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-row {
+        grid-template-columns: 85px 1fr 45px;
+        gap: 8px;
+      }
+
+      .subject-checks {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-value {
+        font-size: 22px;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .topbar, .hero, .dashboard-stats, .quick-links,
+      #calculator, #tracker, #chartSection, #advice,
+      #timetableSetup, .no-print, footer {
+        display: none !important;
+      }
+
+      #timetable {
+        display: block !important;
+        box-shadow: none;
+        border: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">🌿 Student <span>Analyser</span></div>
+    <a href="#dashboard">My Dashboard ↗</a>
+  </header>
+
+  <main class="container">
+    <!-- STUDENT DASHBOARD -->
+    <section class="hero" id="dashboard">
+      <div class="eyebrow">Your personal study companion</div>
+      <h1>Grow your grades, one step at a time. 🌱</h1>
+      <p>
+        Understand your performance, set a goal, and create a
+        study plan that works for you.
+      </p>
+      <a class="button primary" href="#calculator">Analyse My Marks</a>
+      <a class="button secondary" href="#timetableSetup">Plan My Study</a>
+    </section>
+
+    <div class="section-heading">
+      <h2>Your Dashboard</h2>
+      <p>A quick overview of your academic progress.</p>
+    </div>
+
+    <section class="dashboard-stats" aria-label="Student overview">
+      <div class="stat">
+        <div class="stat-label">Current Percentage</div>
+        <div class="stat-value" id="dashboardPercentage">—</div>
+        <div class="stat-note">Analyse marks to update</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Your Target</div>
+        <div class="stat-value" id="dashboardTarget">90%</div>
+        <div class="stat-note">Your personal goal</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Strongest Subject</div>
+        <div class="stat-value" id="dashboardStrongest">—</div>
+        <div class="stat-note">Based on your marks</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Needs More Practice</div>
+        <div class="stat-value" id="dashboardWeakest">—</div>
+        <div class="stat-note">A chance to improve</div>
+      </div>
+    </section>
+
+    <nav class="quick-links" aria-label="Quick navigation">
+      <a href="#calculator">📝 Marks Calculator</a>
+      <a href="#tracker">🎯 Target Tracker</a>
+      <a href="#chartSection">📊 Performance Chart</a>
+      <a href="#advice">💡 Study Advice</a>
+      <a href="#timetableSetup">📅 Study Timetable</a>
+    </nav>
+
+    <!-- MARKS CALCULATOR -->
+    <div class="section-heading" id="calculator">
+      <h2>📝 Marks Calculator</h2>
+      <p>Enter your marks for all five subjects.</p>
+    </div>
+
+    <section class="card">
+      <div class="subject-grid" id="subjectInputs"></div>
+
+      <div class="button-row no-print">
+        <button class="button primary" id="analyseButton">
+          Analyse My Performance
+        </button>
+      </div>
+
+      <div class="error" id="calculatorError" role="alert"></div>
+      <div class="notice">
+        Enter marks obtained and maximum marks for each subject.
+        Maximum marks default to 80.
+      </div>
+
+      <div id="results" hidden>
+        <div class="result-grid">
+          <div class="result-box">
+            <span>Overall Percentage</span>
+            <strong id="overallPercentage">0%</strong>
+          </div>
+          <div class="result-box">
+            <span>Strongest Subject</span>
+            <strong id="strongestSubject">—</strong>
+          </div>
+          <div class="result-box">
+            <span>Needs More Practice</span>
+            <strong id="weakestSubject">—</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARGET TRACKER -->
+    <div class="section-heading" id="tracker">
+      <h2>🎯 Current Percentage vs Target</h2>
+      <p>Choose a target and see how close you are to your goal.</p>
+    </div>
+
+    <section class="card">
+      <div class="tracker-controls">
+        <div class="field">
+          <label for="targetSlider">Set your target percentage</label>
+          <input id="targetSlider" type="range" min="1" max="100"
+            value="90">
+        </div>
+
+        <div class="field">
+          <label for="targetInput">Target (%)</label>
+          <input id="targetInput" type="number" min="1" max="100"
+            value="90">
+        </div>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-fill" id="targetProgress"></div>
+      </div>
+
+      <p id="targetMessage" aria-live="polite">
+        Analyse your marks to see your progress.
+      </p>
+    </section>
+
+    <!-- PERFORMANCE CHART -->
+    <div class="section-heading" id="chartSection">
+      <h2>📊 Subject Performance</h2>
+      <p>See how your percentage compares across subjects.</p>
+    </div>
+
+    <section class="card">
+      <div id="performanceChart">
+        <p class="notice">Your chart will appear after you analyse your marks.</p>
+      </div>
+    </section>
+
+    <!-- SMART ADVICE -->
+    <div class="section-heading" id="advice">
+      <h2>💡 Smart Study Advice</h2>
+      <p>Simple suggestions based on your results.</p>
+    </div>
+
+    <section class="card">
+      <div id="studyAdvice">
+        <p class="notice">
+          Analyse your marks to receive personalised study suggestions.
+        </p>
+      </div>
+    </section>
+
+    <!-- TIMETABLE GENERATOR -->
+    <div class="section-heading" id="timetableSetup">
+      <h2>📅 Study Timetable Generator</h2>
+      <p>Create a revision plan around your available time.</p>
+    </div>
+
+    <section class="card">
+      <div class="subject-grid">
+        <div class="field">
+          <label for="studyHours">Study hours per day</label>
+          <select id="studyHours">
+            <option value="1">1 hour</option>
+            <option value="2">2 hours</option>
+            <option value="3" selected>3 hours</option>
+            <option value="4">4 hours</option>
+            <option value="5">5 hours</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="examDays">Days until exam</label>
+          <input id="examDays" type="number" min="1" max="30" value="7">
+        </div>
+      </div>
+
+      <p><strong>Choose the subjects to revise:</strong></p>
+      <div class="subject-checks" id="subjectChecks"></div>
+
+      <div class="button-row no-print">
+        <button class="button primary" id="generateTimetableButton">
+          Generate My Timetable
+        </button>
+        <button class="button secondary" id="printTimetableButton">
+          Print / Save as PDF
+        </button>
+      </div>
+
+      <div class="error" id="timetableError" role="alert"></div>
+    </section>
+
+    <section class="card" id="timetable" hidden>
+      <h2>Your Revision Plan 🌿</h2>
+      <p class="notice" id="timetableSummary"></p>
+      <div id="timetableOutput"></div>
+    </section>
+  </main>
+
+  <footer>
+    Made with 🌿 for better learning — Student Analyser
+  </footer>
+
+  <script>
+    const subjectNames = [
+      "English",
+      "Mathematics",
+      "Science",
+      "Social Science",
+      "Hindi"
+    ];
+
+    let analysedResults = null;
+
+    // Create the five marks input cards.
+    function createSubjectInputs() {
+      const container = document.getElementById("subjectInputs");
+      const checks = document.getElementById("subjectChecks");
+
+      subjectNames.forEach((subject, index) => {
+        const row = document.createElement("div");
+        row.className = "subject-row";
+
+        const heading = document.createElement("h3");
+        heading.textContent = subject;
+        row.appendChild(heading);
+
+        const inputs = document.createElement("div");
+        inputs.className = "subject-inputs";
+
+        const marksField = document.createElement("div");
+        const marksLabel = document.createElement("label");
+        marksLabel.htmlFor = `marks-${index}`;
+        marksLabel.textContent = "Marks obtained";
+
+        const marksInput = document.createElement("input");
+        marksInput.type = "number";
+        marksInput.id = `marks-${index}`;
+        marksInput.min = "0";
+        marksInput.placeholder = "e.g. 65";
+        marksInput.step = "any";
+
+        marksField.append(marksLabel, marksInput);
+
+        const maxField = document.createElement("div");
+        const maxLabel = document.createElement("label");
+        maxLabel.htmlFor = `max-${index}`;
+        maxLabel.textContent = "Maximum marks";
+
+        const maxInput = document.createElement("input");
+        maxInput.type = "number";
+        maxInput.id = `max-${index}`;
+        maxInput.min = "1";
+        maxInput.value = "80";
+        maxInput.step = "any";
+
+        maxField.append(maxLabel, maxInput);
+        inputs.append(marksField, maxField);
+        row.appendChild(inputs);
+        container.appendChild(row);
+
+        const checkLabel = document.createElement("label");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = subject;
+        checkbox.checked = true;
+        checkbox.id = `check-${index}`;
+
+        checkLabel.append(checkbox, document.createTextNode(subject));
+        checks.appendChild(checkLabel);
+      });
+    }
+
+    function getTarget() {
+      return Number(document.getElementById("targetInput").value);
+    }
+
+    function updateTargetTracker() {
+      const target = getTarget();
+      const slider = document.getElementById("targetSlider");
+      const message = document.getElementById("targetMessage");
+      const progress = document.getElementById("targetProgress");
+
+      if (!Number.isFinite(target) || target < 1 || target > 100) {
+        message.textContent = "Enter a target between 1% and 100%.";
+        progress.style.width = "0%";
+        return;
+      }
+
+      slider.value = target;
+      document.getElementById("dashboardTarget").textContent = target + "%";
+
+      if (!analysedResults) {
+        progress.style.width = "0%";
+        message.textContent =
+          "Analyse your marks to compare your current percentage with your target.";
+        return;
+      }
+
+      const current = analysedResults.percentage;
+      const progressValue = Math.min(100, (current / target) * 100);
+      progress.style.width = progressValue + "%";
+
+      if (current >= target) {
+        message.textContent =
+          `Great work! Your current ${current.toFixed(1)}% meets your ${target}% target. Keep revising to maintain your progress.`;
+      } else {
+        message.textContent =
+          `You are ${(target - current).toFixed(1)} percentage points away from your ${target}% target. Focus on understanding topics you find difficult.`;
+      }
+    }
+
+    function analysePerformance() {
+      const error = document.getElementById("calculatorError");
+      error.textContent = "";
+
+      const subjects = [];
+      let totalMarks = 0;
+      let totalMaximum = 0;
+
+      for (let i = 0; i < subjectNames.length; i++) {
+        const marksInput = document.getElementById(`marks-${i}`);
+        const maxInput = document.getElementById(`max-${i}`);
+
+        const marksText = marksInput.value.trim();
+        const maxText = maxInput.value.trim();
+
+        if (marksText === "" || maxText === "") {
+          error.textContent =
+            `Please enter marks obtained and maximum marks for ${subjectNames[i]}.`;
+          return;
+        }
+
+        const marks = Number(marksText);
+        const maximum = Number(maxText);
+
+        if (
+          !Number.isFinite(marks) ||
+          !Number.isFinite(maximum) ||
+          maximum <= 0 ||
+          marks < 0 ||
+          marks > maximum
+        ) {
+          error.textContent =
+            `Check the marks for ${subjectNames[i]}. Marks must be from 0 to the maximum marks.`;
+          return;
+        }
+
+        const percentage = (marks / maximum) * 100;
+
+        subjects.push({
+          name: subjectNames[i],
+          marks,
+          maximum,
+          percentage
+        });
+
+        totalMarks += marks;
+        totalMaximum += maximum;
+      }
+
+      const overall = (totalMarks / totalMaximum) * 100;
+      const sorted = [...subjects].sort(
+        (a, b) => b.percentage - a.percentage
+      );
+
+      analysedResults = {
+        percentage: overall,
+        subjects,
+        strongest: sorted[0],
+        weakest: sorted[sorted.length - 1]
+      };
+
+      document.getElementById("results").hidden = false;
+      document.getElementById("overallPercentage").textContent =
+        overall.toFixed(1) + "%";
+      document.getElementById("strongestSubject").textContent =
+        sorted[0].name;
+      document.getElementById("weakestSubject").textContent =
+        sorted[sorted.length - 1].name;
+
+      document.getElementById("dashboardPercentage").textContent =
+        overall.toFixed(1) + "%";
+      document.getElementById("dashboardStrongest").textContent =
+        sorted[0].name;
+      document.getElementById("dashboardWeakest").textContent =
+        sorted[sorted.length - 1].name;
+
+      renderChart(subjects);
+      renderAdvice(analysedResults);
+      updateTargetTracker();
+    }
+
+    function renderChart(subjects) {
+      const chart = document.getElementById("performanceChart");
+      chart.replaceChildren();
+
+      subjects.forEach(subject => {
+        const row = document.createElement("div");
+        row.className = "chart-row";
+
+        const label = document.createElement("span");
+        label.textContent = subject.name;
+
+        const track = document.createElement("div");
+        track.className = "bar-track";
+
+        const fill = document.createElement("div");
+        fill.className = "bar-fill";
+        fill.style.width = subject.percentage + "%";
+        track.appendChild(fill);
+
+        const value = document.createElement("strong");
+        value.textContent = subject.percentage.toFixed(1) + "%";
+
+        row.append(label, track, value);
+        chart.appendChild(row);
+      });
+    }
+
+    function renderAdvice(results) {
+      const container = document.getElementById("studyAdvice");
+      container.replaceChildren();
+
+      const list = document.createElement("ul");
+      list.className = "advice-list";
+
+      const suggestions = [];
+      const weakest = results.weakest;
+      const strongest = results.strongest;
+
+      if (results.percentage >= 90) {
+        suggestions.push(
+          "Excellent progress! Keep practising and review mistakes to maintain your performance."
+        );
+      } else if (results.percentage >= 75) {
+        suggestions.push(
+          "You have a good foundation. Use practice questions to strengthen topics where you lose marks."
+        );
+      } else if (results.percentage >= 50) {
+        suggestions.push(
+          "Build consistency with short revision sessions and questions after each topic."
+        );
+      } else {
+        suggestions.push(
+          "Start with the basics, revise one topic at a time, and ask a teacher for help where needed."
+        );
+      }
+
+      suggestions.push(
+        `Give extra revision time to ${weakest.name}, currently your lowest-scoring subject.`
+      );
+
+      suggestions.push(
+        `Keep practising ${strongest.name} so you can maintain your progress there.`
+      );
+
+      suggestions.push(
+        "After every practice test, review mistakes and write down what you need to revise next."
+      );
+
+      suggestions.forEach(suggestion => {
+        const item = document.createElement("li");
+        item.textContent = suggestion;
+        list.appendChild(item);
+      });
+
+      container.appendChild(list);
+    }
+
+    function generateTimetable() {
+      const error = document.getElementById("timetableError");
+      error.textContent = "";
+
+      const hours = Number(document.getElementById("studyHours").value);
+      const days = Number(document.getElementById("examDays").value);
+
+      if (!Number.isInteger(days) || days < 1 || days > 30) {
+        error.textContent = "Enter between 1 and 30 days until your exam.";
+        return;
+      }
+
+      const selected = [...document.querySelectorAll(
+        "#subjectChecks input:checked"
+      )].map(input => input.value);
+
+      if (selected.length === 0) {
+        error.textContent = "Please select at least one subject.";
+        return;
+      }
+
+      // If marks have been analysed, prioritise weaker selected subjects.
+      let ordered = [...selected];
+
+      if (analysedResults) {
+        ordered.sort((a, b) => {
+          const aSubject = analysedResults.subjects.find(s => s.name === a);
+          const bSubject = analysedResults.subjects.find(s => s.name === b);
+          return aSubject.percentage - bSubject.percentage;
+        });
+      }
+
+      const output = document.getElementById("timetableOutput");
+      output.replaceChildren();
+
+      const summary = document.getElementById("timetableSummary");
+      summary.textContent =
+        `${hours} hour(s) per day for ${days} day(s). ` +
+        (analysedResults
+          ? "Subjects are prioritised using your analysed marks."
+          : "Subjects are rotated evenly because marks have not been analysed yet.");
+
+      const list = document.createElement("div");
+      list.className = "timetable-list";
+
+      const sessionMinutes = Math.floor((hours * 60) / 2);
+      const breakMinutes = 10;
+      const startHour = 9;
+
+      for (let day = 1; day <= days; day++) {
+        const dayHeading = document.createElement("h3");
+        dayHeading.textContent = `Day ${day}`;
+        list.appendChild(dayHeading);
+
+        const subjectsToday = [];
+
+        for (let session = 0; session < 2; session++) {
+          const index = ((day - 1) * 2 + session) % ordered.length;
+          subjectsToday.push(ordered[index]);
+        }
+
+        subjectsToday.forEach((subject, sessionIndex) => {
+          const startMinutes = startHour * 60 +
+            sessionIndex * (sessionMinutes + breakMinutes);
+          const endMinutes = startMinutes + sessionMinutes;
+
+          const formatTime = total => {
+            const hour24 = Math.floor(total / 60) % 24;
+            const mins = total % 60;
+            const suffix = hour24 >= 12 ? "PM" : "AM";
+            const hour12 = hour24 % 12 || 12;
+            return `${hour12}:${String(mins).padStart(2, "0")} ${suffix}`;
+          };
+
+          const card = document.createElement("div");
+          card.className = "study-session";
+
+          const text = document.createElement("div");
+          const title = document.createElement("strong");
+          title.textContent = subject;
+
+          const detail = document.createElement("div");
+          detail.textContent = sessionIndex === 0
+            ? "Revise concepts and notes"
+            : "Practise questions and review mistakes";
+
+          text.append(title, detail);
+
+          const time = document.createElement("span");
+          time.textContent =
+            `${formatTime(startMinutes)} – ${formatTime(endMinutes)}`;
+
+          card.append(text, time);
+          list.appendChild(card);
+        });
+
+        const breakNote = document.createElement("p");
+        breakNote.className = "notice";
+        breakNote.textContent =
+          "Take a short break between sessions and adjust the times to suit your day.";
+        list.appendChild(breakNote);
+      }
+
+      output.appendChild(list);
+      document.getElementById("timetable").hidden = false;
+      document.getElementById("timetable").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    // Button and tracker events.
+    document.getElementById("analyseButton").addEventListener(
+      "click",
+      analysePerformance
+    );
+
+    document.getElementById("targetSlider").addEventListener(
+      "input",
+      event => {
+        document.getElementById("targetInput").value = event.target.value;
+        updateTargetTracker();
+      }
+    );
+
+    document.getElementById("targetInput").addEventListener(
+      "input",
+      updateTargetTracker
+    );
+
+    document.getElementById("generateTimetableButton").addEventListener(
+      "click",
+      generateTimetable
+    );
+
+    document.getElementById("printTimetableButton").addEventListener(
+      "click",
+      () => {
+        if (document.getElementById("timetable").hidden) {
+          document.getElementById("timetableError").textContent =
+            "Generate your timetable first, then print or save it as a PDF.";
+          return;
+        }
+
+        window.print();
+      }
+    );
+
+    createSubjectInputs();
+    updateTargetTracker();
+  </script>
+</body>
+</html>
